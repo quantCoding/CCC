@@ -1,13 +1,14 @@
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.Objects;
 import java.util.Queue;
 
 public class Snack_Vendor {
 
     public static void main(String[] args) {
 
-        if (args.length == 0)  {
-            System.out.println("The program requires the following arguments { level(1-6) level input }");
+        if (args.length < 2) {
+            System.out.println("The program requires the following arguments { level=[1|2|3|4|5|6] input }");
             System.exit(-1);
         }
         int level = Integer.parseInt(args[0]);
@@ -115,7 +116,7 @@ public class Snack_Vendor {
 
     private static String getLevel5(String[] args) {
 
-        HashSet<Integer> visited = new HashSet<>();
+        HashSet<Position> visited = new HashSet<>();
 
         Position currentPos = new Position(args[1].charAt(0) - 'A', Integer.parseInt(args[1].substring(1)), 0);
         Position desiredPos = new Position(args[2].charAt(0) - 'A', Integer.parseInt(args[2].substring(1)), 0);
@@ -130,8 +131,8 @@ public class Snack_Vendor {
             if (current.getRow() < 0 || current.getRow() >= Integer.parseInt(args[0].charAt(0) - 'A' + "") + 1)
                 continue;
 
-            if (visited.contains(current.getRow() * 1000 + current.getCol())) continue;
-            visited.add(current.getRow() * 1000 + current.getCol());
+            if (visited.contains(current)) continue;
+            visited.add(current);
 
             queue.add(new Position(current.getRow(), current.getCol() + 1, current.getTime() + 1));
             queue.add(new Position(current.getRow(), current.getCol() - 1, current.getTime() + 1));
@@ -151,7 +152,7 @@ public class Snack_Vendor {
 
     private static String getLevel6(String[] args) {
 
-        HashSet<Integer> visited = new HashSet<>();
+        HashSet<Position> visited = new HashSet<>();
 
         Position currentPos = new Position(args[1].charAt(0) - 'A', Integer.parseInt(args[1].substring(1)), 0);
         Position desiredPos = new Position(args[2].charAt(0) - 'A', Integer.parseInt(args[2].substring(1)), 0);
@@ -167,8 +168,8 @@ public class Snack_Vendor {
             if (current.getRow() < 0 || current.getRow() >= Integer.parseInt(args[0].charAt(0) - 'A' + "") + 1)
                 continue;
 
-            if (visited.contains(current.getRow() * 1000 + current.getCol())) continue;
-            visited.add(current.getRow() * 1000 + current.getCol());
+            if (visited.contains(current)) continue;
+            visited.add(current);
 
             if (directionRestriction != 0)
                 queue.add(new Position(current.getRow(), current.getCol() + 1, current.getTime() + 1));
@@ -223,6 +224,11 @@ public class Snack_Vendor {
             if (o == null || getClass() != o.getClass()) return false;
             Position position = (Position) o;
             return row == position.row && col == position.col;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(row, col);
         }
     }
 }
